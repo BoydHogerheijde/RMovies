@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(\"dplyr\")\nlibrary(\"plotly\")\n\nsource(\"imdb.R\")\n\n# Server logic.\nserver <- function(input, output) {\n  \n  # Reactive block containing filter logic.\n  movies <- reactive({\n    \n    # Variables containing filter values.\n    min_rating <- input$rating\n    min_year <- input$year[1]\n    max_year <- input$year[2]\n    min_duration <- input$duration\n    \n    # Actual filtering of the imdb dataframe, assigned into a filtered dataframe.\n    filtered <- imdb %>%\n      filter(rating >= min_rating,\n             year >= min_year,\n             year <= max_year,\n             duration >= min_duration) %>%\n      arrange(desc(rating))\n    \n    # Filter based on selected genre. 'All' is used as a default value, it doesn't need filtering when 'All' is selected.\n    if (input$genre != \"All\") {\n      selected_genre <- input$genre\n      filtered <- filtered %>% filter(genre == selected_genre)\n    }\n    \n    filtered\n  })\n  \n  average_rating_per_year <- reactive({\n    aggregate(movies()[, \"rating\"], list(movies()$year), mean)\n  })\n  \n  # Render plots with plot.ly lib\n  output$plot <- renderPlotly(\n    plot <- plot_ly(\n      movies(), # Input dataframe.\n      x = ~year, # X axis.\n      y = ~rating, # Y axis.\n      type = \"scatter\", # Type of plot, this is a 'scatter' plot.\n      mode = \"markers\", # Selected mode, 'markers' is the selected mode.\n      color = ~genre, # Colored legend based on the distinct valus of the 'genre' column.\n      text = ~title # Hover text includes the movie title.\n    )\n  )\n  \n  output$plot1 <- renderPlotly(\n    plot <- plot_ly(\n      average_rating_per_year(), # Input dataframe.\n      x = ~Group.1, # X axis.\n      y = ~x, # Y axis.\n      type = \"bar\" # Type of plot, this is a 'bar' plot.\n    ) %>%\n      layout(\n        xaxis = list(title = \"year\"),\n        yaxis = list(title = \"average rating\")\n      )\n  )\n  \n  output$table <- renderDataTable(movies())\n  \n  output$number_of_movies <- renderText({\n    nrow(movies())\n  })\n}",
+    "created" : 1490735835751.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "894665350",
+    "id" : "48BEF321",
+    "lastKnownWriteTime" : 1491500316,
+    "last_content_update" : 1491500316195,
+    "path" : "~/Development/R/RMovies/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

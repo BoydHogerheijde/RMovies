@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(\"shiny\")\nlibrary(\"plotly\")\n\n# UI.\nui <- fluidPage(\n  \n  # App title.\n  titlePanel(\"RMovies\", windowTitle = \"RMovies - Movie db comparator\"),\n  \n  sidebarLayout(\n    \n    # Sidebar with slider inputs for filtering on different criteria.\n    sidebarPanel(\n      h4(\"Filter\"),\n      sliderInput(\"year\", \"Year released\", 1960,  2017, c(1980, 2017), step = 1),\n      sliderInput(\"rating\", \"Rating(min. numeric rating)\", 1, 10, 5.5, step = 0.1),\n      sliderInput(\n        \"duration\",\n        \"Duration(min. duration in minutes)\",\n        0,\n        180,\n        100,\n        step = 1\n      ),\n      \n      h4(\"Choose a genre\"),\n      selectInput(\"genre\",\n                  \"Genre\",\n                  c(\"All\",\n                    genres),\n                  selected = \"All\")\n    ),\n    \n    # Mainpanel containing plots and data table in tabs.\n    mainPanel(tabsetPanel(\n      tabPanel(\"Movies\", plotlyOutput(\"plot\")),\n      tabPanel(\"Average/year\", plotlyOutput(\"plot1\")),\n      tabPanel(\"Table\", dataTableOutput(\"table\"))\n    ),\n    \n    # Small panel at the bottom of the screen maintaining a count of movies used to produce the output graphs/tables.\n    wellPanel(span(\n      \"Number of movies: \",\n      textOutput(\"number_of_movies\")\n    )))\n  )\n)\n",
+    "created" : 1490735843210.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "872255362",
+    "id" : "D46CC7FA",
+    "lastKnownWriteTime" : 1491500657,
+    "last_content_update" : 1491500657720,
+    "path" : "~/Development/R/RMovies/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
